@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f0f8ff;
+            padding: 20px;
+        }
+        #weather-container {
+            margin-top: 20px;
+        }
+        #chart-container {
+            width: 80%;
+            margin: auto;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <h1>Weather Web Application</h1>
+    <form action="/" method="post">
+        <input type="text" name="cityName" placeholder="Enter city name" required>
+        <button type="submit">Get Weather</button>
+    </form>
+    <div id="weather-container">
+        <h2 id="date-time"></h2>
+        <div id="weather-data"></div>
+    </div>
+    <div id="chart-container">
+        <canvas id="weatherChart"></canvas>
+    </div>
+    <script>
+        document.getElementById('date-time').innerText = new Date().toLocaleString();
+        const ctx = document.getElementById('weatherChart').getContext('2d');
+        const weatherChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: [], // Populate with historical dates
+                datasets: [{
+                    label: 'Temperature',
+                    data: [], // Populate with historical temperatures
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    x: {
+                        type: 'time',
+                        time: {
+                            unit: 'day'
+                        }
+                    },
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Function to update chart with new data
+        function updateChart(labels, data) {
+            weatherChart.data.labels = labels;
+            weatherChart.data.datasets[0].data = data;
+            weatherChart.update();
+        }
+
+        // Fetch historical weather data
+        fetch('/historical-weather-data')
+            .then(response => response.json())
+            .then(data => {
+                const labels = data.map(item => item.date);
+                const temps = data.map(item => item.temp);
+                updateChart(labels, temps);
+            });
+    </script>
+</body>
+</html>
