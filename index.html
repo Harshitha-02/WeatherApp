@@ -40,10 +40,10 @@
         const weatherChart = new Chart(ctx, {
             type: 'line',
             data: {
-                labels: [], // Populate with historical dates
+                labels: [], 
                 datasets: [{
                     label: 'Temperature',
-                    data: [], // Populate with historical temperatures
+                    data: [], 
                     borderColor: 'rgba(75, 192, 192, 1)',
                     borderWidth: 1
                 }]
@@ -63,14 +63,12 @@
             }
         });
 
-        // Function to update chart with new data
         function updateChart(labels, data) {
             weatherChart.data.labels = labels;
             weatherChart.data.datasets[0].data = data;
             weatherChart.update();
         }
 
-        // Fetch historical weather data
         fetch('/historical-weather-data')
             .then(response => response.json())
             .then(data => {

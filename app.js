@@ -4,9 +4,9 @@ const bodyParser = require('body-parser');
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static("public")); // To serve static files like CSS
+app.use(express.static("public")); 
 
-const apiKey = "636ab00299512d9b78d7ae89ebf90f7c"; // Replace with your OpenWeatherMap API key
+const apiKey = "636ab00299512d9b78d7ae89ebf90f7c"; 
 
 app.get('/', (req, res) => {
     res.sendFile(__dirname + "/index.html");
